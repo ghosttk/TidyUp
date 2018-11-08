@@ -52,14 +52,14 @@ export default {
     }
   },
   mounted: function () {
-    var mydate = new Date()
-    this.tdata = [{place: '01', items: ['01'], dates: [mydate.toLocaleString()], unsaved: [true]}]
-    this.getToken()
+   let mydate = new Date()
+   this.tdata = [{place: '01', items: ['01'], dates: [mydate.toLocaleString()], unsaved: [true]}]
+   this.getToken()
   },
   methods: {
     onEditItem (iname) {
       if (iname === '') return
-      var mydate = new Date()
+      let mydate = new Date()
       this.tdata[this.curPlaceIndex].items[this.curItemIndex] = iname
       this.tdata[this.curPlaceIndex].dates[this.curItemIndex] = mydate.toLocaleString()
     },
@@ -81,7 +81,7 @@ export default {
     },
     onAddItem: function (iname) {
       if (iname === '') return
-      var mydate = new Date()
+      let mydate = new Date()
       this.tdata[this.curPlaceIndex].items.push(iname)
       this.tdata[this.curPlaceIndex].dates.push(mydate.toLocaleString())
       this.tdata[this.curPlaceIndex].unsaved.push(true)
@@ -98,13 +98,22 @@ export default {
     },
     onAddPlace: function (pname) {
       if (pname === '') return
-      var mydate = new Date()
+      let mydate = new Date()
       this.tdata.push({place: pname, items: [], dates: [mydate.toLocaleString()], unsaved: [true]})
     },
     getToken () {
       axios.get('http://localhost:8000/api/things')
         .then(res => {
-          console.log(res)
+         let thatdata = eval(res.data)
+         this.tdata = [this.tdata, ...thatdata]
+         console.log(thatdata)
+        })
+        .catch(err => {
+          console.log(err)
+          /*
+          var mydate = new Date()
+          this.tdata = [{place: '01', items: ['01'], dates: [mydate.toLocaleString()], unsaved: [true]}]
+          */
         })
     }
   }

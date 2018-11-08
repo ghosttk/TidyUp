@@ -48016,8 +48016,18 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
       this.tdata.push({ place: pname, items: [], dates: [mydate.toLocaleString()], unsaved: [true] });
     },
     getToken: function getToken() {
+      var _this = this;
+
       __WEBPACK_IMPORTED_MODULE_4_axios___default.a.get('http://localhost:8000/api/things').then(function (res) {
-        console.log(res);
+        var thatdata = eval(_this.tdata);
+        _this.tdata = thatdata;
+        console.log(res.data);
+      }).catch(function (err) {
+        console.log(err);
+        /*
+        var mydate = new Date()
+        this.tdata = [{place: '01', items: ['01'], dates: [mydate.toLocaleString()], unsaved: [true]}]
+        */
       });
     }
   }

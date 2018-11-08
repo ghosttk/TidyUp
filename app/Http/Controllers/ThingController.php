@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use App\thing;
 use Illuminate\Http\Request;
 
-use App\Repositories\UserRepository;
-
 class ThingController extends Controller
 {
     /**
@@ -14,10 +12,11 @@ class ThingController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
-        return 'rewrw';
+        return json_encode("[{place: '02', items: ['01'], dates: [], unsaved: [true]}]");
+        $user = $request->user();
+        return $user;
     }
 
     /**
