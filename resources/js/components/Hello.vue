@@ -102,7 +102,7 @@ export default {
       this.tdata.push({place: pname, items: [], dates: [mydate.toLocaleString()], unsaved: [true]})
     },
     getToken () {
-      axios.get('http://localhost:8000/api/user')
+      axios.get('http://localhost:8000/api/things')
         .then(res => {
           console.log(res)
         })
