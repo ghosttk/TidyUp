@@ -14,7 +14,6 @@ class ThingController extends Controller
      */
     public function index(Request $request)
     {
-        return json_encode("[{place: '02', items: ['01'], dates: [], unsaved: [true]}]");
         $user = $request->user();
         return $user;
     }
@@ -27,6 +26,7 @@ class ThingController extends Controller
     public function create()
     {
         //
+       return view('things.create'); 
     }
 
     /**
@@ -38,6 +38,7 @@ class ThingController extends Controller
     public function store(Request $request)
     {
         //
+        return 'dfds';
     }
 
     /**
