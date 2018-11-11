@@ -47908,8 +47908,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__EditPlaceDialog___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__EditPlaceDialog__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__EditItemDialog__ = __webpack_require__(70);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__EditItemDialog___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__EditItemDialog__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_axios__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_axios__);
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 //
 //
 //
@@ -47936,9 +47936,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-
-window.axios = __WEBPACK_IMPORTED_MODULE_4_axios___default.a;
-window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+__webpack_require__(18);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'hello',
@@ -48018,10 +48016,10 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
     getToken: function getToken() {
       var _this = this;
 
-      __WEBPACK_IMPORTED_MODULE_4_axios___default.a.get('http://localhost:8000/api/things').then(function (res) {
-        var thatdata = eval(_this.tdata);
-        _this.tdata = thatdata;
-        console.log(res.data);
+      axios.get('http://localhost:8000/things').then(function (res) {
+        var thatdata = eval(res.data);
+        _this.tdata = [_this.tdata].concat(_toConsumableArray(thatdata));
+        console.log(thatdata.jdata);
       }).catch(function (err) {
         console.log(err);
         /*

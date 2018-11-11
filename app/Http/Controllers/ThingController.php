@@ -15,7 +15,8 @@ class ThingController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        return $user;
+        $thing = thing::where(['user_id', $user->id])->firstOrFail();
+        return $thing;
     }
 
     /**

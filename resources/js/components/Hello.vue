@@ -24,9 +24,7 @@ import AddPlaceDialog from './AddPlaceDialog'
 import AddItemDialog from './AddItemDialog'
 import EditPlaceDialog from './EditPlaceDialog'
 import EditItemDialog from './EditItemDialog'
-import axios from 'axios'
-window.axios = axios
-window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
+require('../bootstrap');
 
 export default {
   name: 'hello',
@@ -102,11 +100,11 @@ export default {
       this.tdata.push({place: pname, items: [], dates: [mydate.toLocaleString()], unsaved: [true]})
     },
     getToken () {
-      axios.get('http://localhost:8000/api/things')
+      axios.get('http://localhost:8000/things')
         .then(res => {
          let thatdata = eval(res.data)
          this.tdata = [this.tdata, ...thatdata]
-         console.log(thatdata)
+         console.log(thatdata.jdata)
         })
         .catch(err => {
           console.log(err)
