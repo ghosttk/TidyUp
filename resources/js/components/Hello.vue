@@ -7,6 +7,7 @@
     <EditItemDialog @onEditItem="onEditItem" @onCloseDialog="onClose('mShowEditItem')" :mShow="mShowEditItem" :itemname="curItemName"></EditItemDialog>
   <!-- Buttons -->
     <button class="btn-primary" @click="onShowAddPlace">AddPlace</button>
+    <button class="btn-primary" @click="onSave">Save</button>
     <div v-for="(pl, pi) in tdata" class="place"> 
       <button class="btn-primary" @click="onShowEditPlace(pl, pi)" :style="{ backgroundColor: '#'+pClass[pi%4]+'0'+'0'}">Place:{{ pl.place }}</button>
         <div v-for="(item, ii)  in pl.items" > 
@@ -108,11 +109,16 @@ export default {
         })
         .catch(err => {
           console.log(err)
-          /*
-          var mydate = new Date()
-          this.tdata = [{place: '01', items: ['01'], dates: [mydate.toLocaleString()], unsaved: [true]}]
-          */
         })
+    },
+    onSave () {
+      axios.post('http://localhost:8000/things', {tdata: JSON.stringify(this.tdata)}) 
+      .then( res => {
+        console.log(res)
+      })
+      .catch( err => {
+        console.log(err)
+      })
     }
   }
 }

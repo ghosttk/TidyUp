@@ -47931,6 +47931,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 //
 //
 //
+//
 
 
 
@@ -48022,10 +48023,13 @@ __webpack_require__(18);
         console.log(thatdata.jdata);
       }).catch(function (err) {
         console.log(err);
-        /*
-        var mydate = new Date()
-        this.tdata = [{place: '01', items: ['01'], dates: [mydate.toLocaleString()], unsaved: [true]}]
-        */
+      });
+    },
+    onSave: function onSave() {
+      axios.post('http://localhost:8000/things', { tdata: JSON.stringify(this.tdata) }).then(function (res) {
+        console.log(res);
+      }).catch(function (err) {
+        console.log(err);
       });
     }
   }
@@ -49119,6 +49123,10 @@ var render = function() {
         { staticClass: "btn-primary", on: { click: _vm.onShowAddPlace } },
         [_vm._v("AddPlace")]
       ),
+      _vm._v(" "),
+      _c("button", { staticClass: "btn-primary", on: { click: _vm.onSave } }, [
+        _vm._v("Save")
+      ]),
       _vm._v(" "),
       _vm._l(_vm.tdata, function(pl, pi) {
         return _c(

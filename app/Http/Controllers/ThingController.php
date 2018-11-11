@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\thing;
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\Log;
+
 class ThingController extends Controller
 {
     /**
@@ -14,6 +16,7 @@ class ThingController extends Controller
      */
     public function index(Request $request)
     {
+        Log::info($request);
         $user = $request->user();
         $thing = thing::where(['user_id', $user->id])->firstOrFail();
         return $thing;
@@ -39,7 +42,15 @@ class ThingController extends Controller
     public function store(Request $request)
     {
         //
-        return 'dfds';
+        $user = $request->user();
+        $thing = thing::where(['user_id', $user->id])->first();
+        if (!$thing) {
+          $thing = new thing;
+          $thing->user_id = $user->id;
+          $thing->jdata = $request->tdata;
+          $thing->save();
+        }
+        return 'succeed';
     }
 
     /**
