@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\thing;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class ThingController extends Controller
@@ -14,11 +14,11 @@ class ThingController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        Log::info($request);
-        $user = $request->user();
-        $thing = thing::where(['user_id', $user->id])->firstOrFail();
+        $id = Auth::id();
+        $thing = thing::where('user_id', $id)->firstOrFail();
+        Log::info($id);
         return $thing;
     }
 
@@ -43,14 +43,15 @@ class ThingController extends Controller
     {
         //
         $user = $request->user();
-        $thing = thing::where(['user_id', $user->id])->first();
+        $thing = thing::where('user_id', $user->id)->first();
         if (!$thing) {
           $thing = new thing;
           $thing->user_id = $user->id;
           $thing->jdata = $request->tdata;
           $thing->save();
         }
-        return 'succeed';
+        Log::info($thing);
+        return $thing;
     }
 
     /**

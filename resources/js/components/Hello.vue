@@ -74,7 +74,6 @@ export default {
     },
     onShowEditPlace (pl, pi) {
       this.curPlaceName = pl.place
-      console.log(pl.place)
       this.curPlaceIndex = pi
       this.mShowEditPlace = true
     },
@@ -103,9 +102,9 @@ export default {
     getToken () {
       axios.get('http://localhost:8000/things')
         .then(res => {
-         let thatdata = eval(res.data)
+         let thatdata = eval(res.data.jdata)
          this.tdata = [this.tdata, ...thatdata]
-         console.log(thatdata.jdata)
+         console.log(thatdata)
         })
         .catch(err => {
           console.log(err)
