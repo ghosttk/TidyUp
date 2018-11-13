@@ -48025,7 +48025,9 @@ __webpack_require__(7);
       });
     },
     onSave: function onSave() {
-      axios.post('http://localhost:8000/things', { tdata: JSON.stringify(this.tdata) }).then(function (res) {
+      //  axios.post('http://localhost:8000/things', {tdata: JSON.stringify(this.tdata)}) 
+      //console.log(JSON.stringify(this.tdata))
+      axios.post('http://localhost:8000/things', { tdata: this.tdata }).then(function (res) {
         console.log(res);
       }).catch(function (err) {
         console.log(err);

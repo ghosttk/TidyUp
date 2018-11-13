@@ -17,8 +17,7 @@ class ThingController extends Controller
     public function index()
     {
         $id = Auth::id();
-        $thing = thing::where('user_id', $id)->firstOrFail();
-        Log::info($id);
+        $thing = thing::where('user_id', $id)->first();
         return $thing;
     }
 
@@ -42,15 +41,16 @@ class ThingController extends Controller
     public function store(Request $request)
     {
         //
-        $user = $request->user();
-        $thing = thing::where('user_id', $user->id)->first();
-        if (!$thing) {
-          $thing = new thing;
-          $thing->user_id = $user->id;
-          $thing->jdata = $request->tdata;
-          $thing->save();
+        $userid = $request->user()->id;
+        $thing = thing::where('user_id', $userid)->first();
+        Log::debug($thing);
+        if(!$thing){
+            $thing = new thing;
+            $thing->user_id = $userid;
         }
-        Log::info($thing);
+      
+        $thing->jdata = json_encode($request->tdata);
+        $thing->save();
         return $thing;
     }
 

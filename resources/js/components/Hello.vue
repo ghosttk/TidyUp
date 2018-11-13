@@ -111,7 +111,9 @@ export default {
         })
     },
     onSave () {
-      axios.post('http://localhost:8000/things', {tdata: JSON.stringify(this.tdata)}) 
+    //  axios.post('http://localhost:8000/things', {tdata: JSON.stringify(this.tdata)}) 
+      //console.log(JSON.stringify(this.tdata))
+      axios.post('http://localhost:8000/things', {tdata: this.tdata})
       .then( res => {
         console.log(res)
       })
