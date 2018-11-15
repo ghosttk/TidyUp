@@ -4,11 +4,13 @@
     <AddPlaceDialog @onAddPlace="onAddPlace" @onCloseDialog="onClose('mShowAddPlace')" :mShow="mShowAddPlace"></AddPlaceDialog>
     <AddItemDialog @onAddItem="onAddItem" @onCloseDialog="onClose('mShowAddItem')" :mShow="mShowAddItem"></AddItemDialog>
     <EditPlaceDialog @onEditPlace="onEditPlace" @onCloseDialog="onClose('mShowEditPlace')" :mShow="mShowEditPlace" :placename="curPlaceName"></EditPlaceDialog>
-    <EditItemDialog @onEditItem="onEditItem" @onCloseDialog="onClose('mShowEditItem')" :mShow="mShowEditItem" :itemname="curItemName"></EditItemDialog>
+    <EditItemDialog @onDeleteItem="onDeleteItem" @onEditItem="onEditItem" @onCloseDialog="onClose('mShowEditItem')" :mShow="mShowEditItem" :itemname="curItemName"></EditItemDialog>
+    <SearchItemResultDialog @onCloseDialog="onClose('mShowSearchItemResult')" :arrItem="searchResult" :mShow="mShowSearchItemResult"></SearchItemResultDialog>
   <!-- Buttons -->
     <button class="btn-primary" @click="onShowAddPlace">AddPlace</button>
+    <input type="text" v-model="searchItem" @keyup.enter="onSearchItem">search</input>
     <button class="btn-primary" @click="onSave">Save</button>
-    <div v-for="(pl, pi) in tdata" class="place"> 
+    <div v-for="(pl, pi) in tdata" class="place" :id="pi"> 
       <button class="btn-primary" @click="onShowEditPlace(pl, pi)" :style="{ backgroundColor: '#'+pClass[pi%4]+'0'+'0'}">Place:{{ pl.place }}</button>
         <div v-for="(item, ii)  in pl.items" > 
         <button class="btn-primary btn-item" @click="onShowEditItem(pi, item, ii)" :style="{ backgroundColor: '#'+pClass[pi%4]+'0'+pClass[ii%4], color: '#fff'}"> {{ item }} </button> {{pl.dates[ii]}} <code v-if="pl.unsaved[ii]">unsaved</code>
@@ -25,6 +27,7 @@ import AddPlaceDialog from './AddPlaceDialog'
 import AddItemDialog from './AddItemDialog'
 import EditPlaceDialog from './EditPlaceDialog'
 import EditItemDialog from './EditItemDialog'
+import SearchItemResultDialog from './SearchItemResultDialog'
 require('../bootstrap');
 
 export default {
@@ -33,11 +36,13 @@ export default {
     AddPlaceDialog,
     AddItemDialog,
     EditPlaceDialog,
-    EditItemDialog
+    EditItemDialog,
+    SearchItemResultDialog
   },
   data () {
     return {
       tdata: '',
+      searchItem: '',
       isShowLog: false,
       mShowAddPlace: false,
       mShowAddItem: false,
@@ -45,8 +50,10 @@ export default {
       curPlaceName: '',
       mShowEditPlace: false,
       mShowEditItem: false,
+      mShowSearchItemResult: false,
       curItemIndex: 0,
       curItemName: '',
+      searchResult: [],
       pClass: ['3', '6', '9', 'c']
     }
   },
@@ -54,11 +61,31 @@ export default {
    this.getTdata()
   },
   methods: {
+    onSearchItem () {
+      for (let i=0; i<this.tdata.length; i++){
+        for (let j=0; j<this.tdata[i].items.length; j++){
+          if (this.tdata[i].items[j].indexOf(this.searchItem) !== -1){
+            this.searchResult.push([i, j])
+          }
+        }
+      }
+      if(this.searchResult.length !== 0){
+      console.log(this.searchResult)
+      this.mShowSearchItemResult = true
+      }
+      this.searchResult = []
+    },
     onEditItem (iname) {
       if (iname === '') return
       let mydate = new Date()
       this.tdata[this.curPlaceIndex].items[this.curItemIndex] = iname
       this.tdata[this.curPlaceIndex].dates[this.curItemIndex] = mydate.toLocaleString()
+    },
+    onDeleteItem () {
+      console.log('delete')
+      this.tdata[this.curPlaceIndex].items.splice(this.curItemIndex,1)
+      this.tdata[this.curPlaceIndex].dates.splice(this.curItemIndex,1)
+      this.tdata[this.curPlaceIndex].unsaved.splice(this.curItemIndex,1)
     },
     onShowEditItem (pi, item, ii) {
       this.curPlaceIndex = pi

@@ -3,6 +3,7 @@
       <div slot="header"> EditItem </div>
       <div slot="body">
         <input ref="inputItem" required :placeholder="itemname" @keyup.enter="EditItem" v-model="itemName" type="text"></input>
+        <button @click="DeleteItem">DeleteItem</button>
       </div>
       <div slot="footer"><button class="btn-primary" @click="EditItem"> Ok </button> </div>
     </Modal>
@@ -26,6 +27,10 @@ export default {
     EditItem: function () {
       this.$emit('onEditItem', this.itemName)
       this.itemName = ''
+      this.onClose()
+    },
+    DeleteItem () {
+      this.$emit('onDeleteItem')
       this.onClose()
     }
   },
