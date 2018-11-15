@@ -47908,8 +47908,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__EditPlaceDialog___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__EditPlaceDialog__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__EditItemDialog__ = __webpack_require__(70);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__EditItemDialog___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__EditItemDialog__);
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
 //
 //
 //
@@ -47964,9 +47962,7 @@ __webpack_require__(7);
   },
 
   mounted: function mounted() {
-    var mydate = new Date();
-    this.tdata = [{ place: '01', items: ['01'], dates: [mydate.toLocaleString()], unsaved: [true] }];
-    this.getToken();
+    this.getTdata();
   },
   methods: {
     onEditItem: function onEditItem(iname) {
@@ -48013,22 +48009,28 @@ __webpack_require__(7);
       var mydate = new Date();
       this.tdata.push({ place: pname, items: [], dates: [mydate.toLocaleString()], unsaved: [true] });
     },
-    getToken: function getToken() {
+    getTdata: function getTdata() {
       var _this = this;
 
       axios.get('http://localhost:8000/things').then(function (res) {
-        var thatdata = eval(res.data.jdata);
-        _this.tdata = [_this.tdata].concat(_toConsumableArray(thatdata));
-        console.log(thatdata);
+        _this.tdata = eval(res.data.jdata);
+        // console.log(thatdata)
       }).catch(function (err) {
         console.log(err);
+        var mydate = new Date();
+        _this.tdata = [{ place: '01', items: ['01'], dates: [mydate.toLocaleString()], unsaved: [true] }];
       });
     },
     onSave: function onSave() {
       //  axios.post('http://localhost:8000/things', {tdata: JSON.stringify(this.tdata)}) 
-      //console.log(JSON.stringify(this.tdata))
+      for (var i = 0; i < this.tdata.length; i++) {
+        for (var j = 0; j < this.tdata[i].unsaved.length; j++) {
+          this.tdata[i].unsaved[j] = false;
+          console.log(this.tdata[i].unsaved[j]);
+        }
+      }
       axios.post('http://localhost:8000/things', { tdata: this.tdata }).then(function (res) {
-        console.log(res);
+        history.go(0);
       }).catch(function (err) {
         console.log(err);
       });
@@ -49158,7 +49160,7 @@ var render = function() {
                     staticClass: "btn-primary btn-item",
                     style: {
                       backgroundColor:
-                        "#" + _vm.pClass[pi] + "0" + _vm.pClass[ii],
+                        "#" + _vm.pClass[pi % 4] + "0" + _vm.pClass[ii % 4],
                       color: "#fff"
                     },
                     on: {

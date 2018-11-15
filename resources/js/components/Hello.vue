@@ -11,7 +11,7 @@
     <div v-for="(pl, pi) in tdata" class="place"> 
       <button class="btn-primary" @click="onShowEditPlace(pl, pi)" :style="{ backgroundColor: '#'+pClass[pi%4]+'0'+'0'}">Place:{{ pl.place }}</button>
         <div v-for="(item, ii)  in pl.items" > 
-        <button class="btn-primary btn-item" @click="onShowEditItem(pi, item, ii)" :style="{ backgroundColor: '#'+pClass[pi]+'0'+pClass[ii], color: '#fff'}"> {{ item }} </button> {{pl.dates[ii]}} <code v-if="pl.unsaved[ii]">unsaved</code>
+        <button class="btn-primary btn-item" @click="onShowEditItem(pi, item, ii)" :style="{ backgroundColor: '#'+pClass[pi%4]+'0'+pClass[ii%4], color: '#fff'}"> {{ item }} </button> {{pl.dates[ii]}} <code v-if="pl.unsaved[ii]">unsaved</code>
         <br>
         </div>
       <button class="btn-primary" @click="onShowAddItem(pi)"> AddItem </button>
@@ -51,9 +51,7 @@ export default {
     }
   },
   mounted: function () {
-   let mydate = new Date()
-   this.tdata = [{place: '01', items: ['01'], dates: [mydate.toLocaleString()], unsaved: [true]}]
-   this.getToken()
+   this.getTdata()
   },
   methods: {
     onEditItem (iname) {
@@ -99,23 +97,29 @@ export default {
       let mydate = new Date()
       this.tdata.push({place: pname, items: [], dates: [mydate.toLocaleString()], unsaved: [true]})
     },
-    getToken () {
+    getTdata() {
       axios.get('http://localhost:8000/things')
         .then(res => {
-         let thatdata = eval(res.data.jdata)
-         this.tdata = [this.tdata, ...thatdata]
-         console.log(thatdata)
+         this.tdata = eval(res.data.jdata)
+        // console.log(thatdata)
         })
         .catch(err => {
           console.log(err)
+          let mydate = new Date()
+          this.tdata = [{place: '01', items: ['01'], dates: [mydate.toLocaleString()], unsaved: [true]}]
         })
     },
     onSave () {
     //  axios.post('http://localhost:8000/things', {tdata: JSON.stringify(this.tdata)}) 
-      //console.log(JSON.stringify(this.tdata))
+        for(let i=0; i<this.tdata.length; i++){
+          for(let j=0; j<this.tdata[i].unsaved.length; j++){
+            this.tdata[i].unsaved[j] = false;
+            console.log(this.tdata[i].unsaved[j])
+          }
+        }
       axios.post('http://localhost:8000/things', {tdata: this.tdata})
       .then( res => {
-        console.log(res)
+        history.go(0)    
       })
       .catch( err => {
         console.log(err)
