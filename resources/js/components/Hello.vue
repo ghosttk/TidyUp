@@ -10,7 +10,7 @@
     <button class="btn-primary" @click="onShowAddPlace">AddPlace</button>
     <input type="text" v-model="searchItem" @keyup.enter="onSearchItem">search</input>
     <button class="btn-primary" @click="onSave">Save</button>
-    <div v-for="(pl, pi) in tdata" class="place" :id="pi"> 
+    <div v-for="(pl, pi) in tdata" class="place" :id="pi" href="'#'+pi"> 
       <button class="btn-primary" @click="onShowEditPlace(pl, pi)" :style="{ backgroundColor: '#'+pClass[pi%4]+'0'+'0'}">Place:{{ pl.place }}</button>
         <div v-for="(item, ii)  in pl.items" > 
         <button class="btn-primary btn-item" @click="onShowEditItem(pi, item, ii)" :style="{ backgroundColor: '#'+pClass[pi%4]+'0'+pClass[ii%4], color: '#fff'}"> {{ item }} </button> {{pl.dates[ii]}} <code v-if="pl.unsaved[ii]">unsaved</code>

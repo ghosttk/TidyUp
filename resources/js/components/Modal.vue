@@ -1,6 +1,6 @@
 <template>
   <transition name="modal-fade">
-    <div class="modal-backdrop" @click="close" v-show="show">
+    <div class="modal-backdrop" @keyup.esc="close" @click="close" v-show="show">
       <div class="modal" @click.stop role="dialog" aria-labelledby="modalTile" arial-describedby="modalDescription">
         <div class="modal-header" id="modalTitle">
           <slot name="header">
@@ -106,4 +106,3 @@ export default {
   margin-left: 3px;
 }
 </style>
-

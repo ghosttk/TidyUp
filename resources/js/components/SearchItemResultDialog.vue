@@ -2,7 +2,8 @@
     <Modal @close="onClose('mShow')" :show='mShow'>
       <div slot="header"> SearchItem</div>
       <div slot="body">
-        <a v-for="p in locItem" :href="p[0]">{{p[0]}}</a>
+        <a v-for="(p, pi) in locItem" :href="'home#'+p[0]" @click="onClose">home#{{p[0]}}<br>{{p}}</a>
+        <br>
       </div>
       <div slot="footer"><button class="btn-primary" @click="onClose"> Ok </button> </div>
     </Modal>
@@ -29,6 +30,8 @@ export default {
     }
   },
   updated: function () {
+    console.log(this.locItem)
+    console.log(this.arrItem)
   }
 }
 </script>
