@@ -3,6 +3,7 @@
       <div slot="header"> EditPlace </div>
       <div slot="body">
         <input ref="inputPlace" required :placeholder="placename" @keyup.enter="EditPlace" v-model.lazy="placeName" type="text"></input>
+        <button @click="DeletePlace">DeletePlace</button>
       </div>
       <div slot="footer"><button @click="EditPlace">Ok</button> </div>
     </Modal>
@@ -26,6 +27,10 @@ export default {
     EditPlace: function () {
       this.$emit('onEditPlace', this.placeName)
       this.placeName = ''
+      this.onClose()
+    },
+    DeletePlace: function () {
+      this.$emit('onDeletePlace')
       this.onClose()
     }
   },

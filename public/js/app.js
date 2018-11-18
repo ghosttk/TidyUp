@@ -1043,7 +1043,7 @@ if (token) {
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* WEBPACK VAR INJECTION */(function(global) {/**!
  * @fileOverview Kickass library to create and place poppers near their reference elements.
- * @version 1.14.4
+ * @version 1.14.5
  * @license
  * Copyright (c) 2016 Federico Zivolo and contributors
  *
@@ -1140,7 +1140,8 @@ function getStyleComputedProperty(element, property) {
     return [];
   }
   // NOTE: 1 DOM access here
-  var css = getComputedStyle(element, null);
+  var window = element.ownerDocument.defaultView;
+  var css = window.getComputedStyle(element, null);
   return property ? css[property] : css;
 }
 
@@ -1228,7 +1229,7 @@ function getOffsetParent(element) {
   var noOffsetParent = isIE(10) ? document.body : null;
 
   // NOTE: 1 DOM access here
-  var offsetParent = element.offsetParent;
+  var offsetParent = element.offsetParent || null;
   // Skip hidden elements which don't have an offsetParent
   while (offsetParent === noOffsetParent && element.nextElementSibling) {
     offsetParent = (element = element.nextElementSibling).offsetParent;
@@ -1240,9 +1241,9 @@ function getOffsetParent(element) {
     return element ? element.ownerDocument.documentElement : document.documentElement;
   }
 
-  // .offsetParent will return the closest TD or TABLE in case
+  // .offsetParent will return the closest TH, TD or TABLE in case
   // no offsetParent is present, I hate this job...
-  if (['TD', 'TABLE'].indexOf(offsetParent.nodeName) !== -1 && getStyleComputedProperty(offsetParent, 'position') === 'static') {
+  if (['TH', 'TD', 'TABLE'].indexOf(offsetParent.nodeName) !== -1 && getStyleComputedProperty(offsetParent, 'position') === 'static') {
     return getOffsetParent(offsetParent);
   }
 
@@ -1790,7 +1791,8 @@ function getReferenceOffsets(state, popper, reference) {
  * @returns {Object} object containing width and height properties
  */
 function getOuterSizes(element) {
-  var styles = getComputedStyle(element);
+  var window = element.ownerDocument.defaultView;
+  var styles = window.getComputedStyle(element);
   var x = parseFloat(styles.marginTop) + parseFloat(styles.marginBottom);
   var y = parseFloat(styles.marginLeft) + parseFloat(styles.marginRight);
   var result = {
@@ -47975,6 +47977,7 @@ __webpack_require__(7);
   },
   methods: {
     onSearchItem: function onSearchItem() {
+      this.searchResult = [];
       for (var i = 0; i < this.tdata.length; i++) {
         for (var j = 0; j < this.tdata[i].items.length; j++) {
           if (this.tdata[i].items[j].indexOf(this.searchItem) !== -1) {
@@ -47983,19 +47986,20 @@ __webpack_require__(7);
         }
       }
       if (this.searchResult.length !== 0) {
-        console.log(this.searchResult);
         this.mShowSearchItemResult = true;
       }
-      this.searchResult = [];
     },
     onEditItem: function onEditItem(iname) {
       if (iname === '') return;
       var mydate = new Date();
       this.tdata[this.curPlaceIndex].items[this.curItemIndex] = iname;
+      this.tdata[this.curPlaceIndex].unsaved[this.curItemIndex] = true;
       this.tdata[this.curPlaceIndex].dates[this.curItemIndex] = mydate.toLocaleString();
     },
+    onDeletePlace: function onDeletePlace() {
+      this.tdata.splice(this.curPlaceIndex, 1);
+    },
     onDeleteItem: function onDeleteItem() {
-      console.log('delete');
       this.tdata[this.curPlaceIndex].items.splice(this.curItemIndex, 1);
       this.tdata[this.curPlaceIndex].dates.splice(this.curItemIndex, 1);
       this.tdata[this.curPlaceIndex].unsaved.splice(this.curItemIndex, 1);
@@ -48036,30 +48040,30 @@ __webpack_require__(7);
     onAddPlace: function onAddPlace(pname) {
       if (pname === '') return;
       var mydate = new Date();
-      this.tdata.push({ place: pname, items: [], dates: [mydate.toLocaleString()], unsaved: [true] });
+      this.tdata.push({ place: pname, items: [], dates: [], unsaved: [], placeDate: mydate.toLocaleString(), PlaceUnsaved: true });
     },
     getTdata: function getTdata() {
       var _this = this;
 
       axios.get('http://localhost:8000/things').then(function (res) {
         _this.tdata = eval(res.data.jdata);
-        // console.log(thatdata)
       }).catch(function (err) {
-        console.log(err);
         var mydate = new Date();
         _this.tdata = [{ place: '01', items: ['01'], dates: [mydate.toLocaleString()], unsaved: [true] }];
       });
     },
     onSave: function onSave() {
+      var _this2 = this;
+
       //  axios.post('http://localhost:8000/things', {tdata: JSON.stringify(this.tdata)}) 
       for (var i = 0; i < this.tdata.length; i++) {
         for (var j = 0; j < this.tdata[i].unsaved.length; j++) {
           this.tdata[i].unsaved[j] = false;
-          console.log(this.tdata[i].unsaved[j]);
         }
       }
       axios.post('http://localhost:8000/things', { tdata: this.tdata }).then(function (res) {
-        history.go(0);
+        // history.go(0)    
+        _this2.$forceUpdate();
       }).catch(function (err) {
         console.log(err);
       });
@@ -48777,7 +48781,7 @@ exports = module.exports = __webpack_require__(2)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -48790,6 +48794,7 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Modal__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Modal___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Modal__);
+//
 //
 //
 //
@@ -48819,6 +48824,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     EditPlace: function EditPlace() {
       this.$emit('onEditPlace', this.placeName);
       this.placeName = '';
+      this.onClose();
+    },
+    DeletePlace: function DeletePlace() {
+      this.$emit('onDeletePlace');
       this.onClose();
     }
   },
@@ -48878,7 +48887,11 @@ var render = function() {
               _vm.placeName = $event.target.value
             }
           }
-        })
+        }),
+        _vm._v(" "),
+        _c("button", { on: { click: _vm.DeletePlace } }, [
+          _vm._v("DeletePlace")
+        ])
       ]),
       _vm._v(" "),
       _c("div", { attrs: { slot: "footer" }, slot: "footer" }, [
@@ -49235,20 +49248,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     };
   },
 
+  computed: {
+    compItem: function compItem() {
+      return this.arrItem;
+    }
+  },
   components: {
     Modal: __WEBPACK_IMPORTED_MODULE_0__Modal___default.a
   },
   methods: {
     onClose: function onClose(wShow) {
       this.$emit('onCloseDialog');
-    },
-    DeleteItem: function DeleteItem() {
-      this.$emit('onDeleteItem');
-      this.onClose();
     }
   },
   updated: function updated() {
-    console.log(this.locItem);
     console.log(this.arrItem);
   }
 });
@@ -49280,7 +49293,7 @@ var render = function() {
         "div",
         { attrs: { slot: "body" }, slot: "body" },
         [
-          _vm._l(_vm.locItem, function(p, pi) {
+          _vm._l(_vm.compItem, function(p, pi) {
             return _c(
               "a",
               { attrs: { href: "home#" + p[0] }, on: { click: _vm.onClose } },
@@ -49348,6 +49361,7 @@ var render = function() {
       _c("EditPlaceDialog", {
         attrs: { mShow: _vm.mShowEditPlace, placename: _vm.curPlaceName },
         on: {
+          onDeletePlace: _vm.onDeletePlace,
           onEditPlace: _vm.onEditPlace,
           onCloseDialog: function($event) {
             _vm.onClose("mShowEditPlace")

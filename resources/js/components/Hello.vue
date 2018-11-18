@@ -3,7 +3,7 @@
   <!-- Dialogs -->
     <AddPlaceDialog @onAddPlace="onAddPlace" @onCloseDialog="onClose('mShowAddPlace')" :mShow="mShowAddPlace"></AddPlaceDialog>
     <AddItemDialog @onAddItem="onAddItem" @onCloseDialog="onClose('mShowAddItem')" :mShow="mShowAddItem"></AddItemDialog>
-    <EditPlaceDialog @onEditPlace="onEditPlace" @onCloseDialog="onClose('mShowEditPlace')" :mShow="mShowEditPlace" :placename="curPlaceName"></EditPlaceDialog>
+    <EditPlaceDialog @onDeletePlace="onDeletePlace" @onEditPlace="onEditPlace" @onCloseDialog="onClose('mShowEditPlace')" :mShow="mShowEditPlace" :placename="curPlaceName"></EditPlaceDialog>
     <EditItemDialog @onDeleteItem="onDeleteItem" @onEditItem="onEditItem" @onCloseDialog="onClose('mShowEditItem')" :mShow="mShowEditItem" :itemname="curItemName"></EditItemDialog>
     <SearchItemResultDialog @onCloseDialog="onClose('mShowSearchItemResult')" :arrItem="searchResult" :mShow="mShowSearchItemResult"></SearchItemResultDialog>
   <!-- Buttons -->
@@ -62,6 +62,7 @@ export default {
   },
   methods: {
     onSearchItem () {
+	  this.searchResult = []
       for (let i=0; i<this.tdata.length; i++){
         for (let j=0; j<this.tdata[i].items.length; j++){
           if (this.tdata[i].items[j].indexOf(this.searchItem) !== -1){
@@ -70,19 +71,20 @@ export default {
         }
       }
       if(this.searchResult.length !== 0){
-      console.log(this.searchResult)
       this.mShowSearchItemResult = true
       }
-      this.searchResult = []
     },
     onEditItem (iname) {
       if (iname === '') return
       let mydate = new Date()
       this.tdata[this.curPlaceIndex].items[this.curItemIndex] = iname
+      this.tdata[this.curPlaceIndex].unsaved[this.curItemIndex] = true
       this.tdata[this.curPlaceIndex].dates[this.curItemIndex] = mydate.toLocaleString()
     },
+    onDeletePlace () {
+	  this.tdata.splice(this.curPlaceIndex, 1)
+    },
     onDeleteItem () {
-      console.log('delete')
       this.tdata[this.curPlaceIndex].items.splice(this.curItemIndex,1)
       this.tdata[this.curPlaceIndex].dates.splice(this.curItemIndex,1)
       this.tdata[this.curPlaceIndex].unsaved.splice(this.curItemIndex,1)
@@ -122,16 +124,14 @@ export default {
     onAddPlace: function (pname) {
       if (pname === '') return
       let mydate = new Date()
-      this.tdata.push({place: pname, items: [], dates: [mydate.toLocaleString()], unsaved: [true]})
+      this.tdata.push({place: pname, items: [], dates: [], unsaved: [],  placeDate: mydate.toLocaleString(), PlaceUnsaved: true})
     },
     getTdata() {
       axios.get('http://localhost:8000/things')
         .then(res => {
          this.tdata = eval(res.data.jdata)
-        // console.log(thatdata)
         })
         .catch(err => {
-          console.log(err)
           let mydate = new Date()
           this.tdata = [{place: '01', items: ['01'], dates: [mydate.toLocaleString()], unsaved: [true]}]
         })
@@ -141,12 +141,12 @@ export default {
         for(let i=0; i<this.tdata.length; i++){
           for(let j=0; j<this.tdata[i].unsaved.length; j++){
             this.tdata[i].unsaved[j] = false;
-            console.log(this.tdata[i].unsaved[j])
           }
         }
       axios.post('http://localhost:8000/things', {tdata: this.tdata})
       .then( res => {
-        history.go(0)    
+         // history.go(0)    
+		 this.$forceUpdate()
       })
       .catch( err => {
         console.log(err)
