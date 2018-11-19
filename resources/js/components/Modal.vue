@@ -5,8 +5,8 @@
         <div class="modal-header" id="modalTitle">
           <slot name="header">
             <h2>这是Modal弹框的标题</h2>
-            <button type="button" class="btn-close" @click="close" aria-label="Close modal">x</button>
           </slot>
+            <button type="button" class="btn-close" @click="close" aria-label="Close modal">x</button>
         </div>
         
         <div class="modal-body" id="modalDescription">
@@ -19,7 +19,7 @@
           <slot name="footer">
             这是Modal弹框的脚部
           </slot>
-        <button type="button" class="btn-green" @click="close" aria-label="Close modal">关闭</button>
+        <button type="button" class="btn-primary" @click="close" aria-label="Close modal">关闭</button>
         </div>
       </div>
     </div>
@@ -55,9 +55,9 @@ export default {
 .modal-backdrop {
   position: fixed;
   top: 0;
+  left: 0;
   right: 0;
   bottom: 0;
-  left: 0;
   background-color: rgba(0,0,0,.3);
   display: flex;
   justify-content: center;
@@ -65,11 +65,12 @@ export default {
 }
 
 .modal {
+  position: relative;
   background-color: #fff;
   box-shadow: 2px 2px 20px 1px;
-  /* overflow-x:auto; */
+  overflow-x:auto; 
   display: flex; 
-  /* flex-direction: column; */
+  flex-direction: column;
 }
 .modal-header,
 .modal-footer {
@@ -91,8 +92,7 @@ export default {
 }
 .btn-close {
   border: none 0;
-  font-size: 20px;
-  padding: 20px;
+  font-size: 1.5em;
   cursor: pointer;
   font-weight: bold;
   color: #4aae9b;

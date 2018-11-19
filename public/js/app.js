@@ -1043,7 +1043,7 @@ if (token) {
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* WEBPACK VAR INJECTION */(function(global) {/**!
  * @fileOverview Kickass library to create and place poppers near their reference elements.
- * @version 1.14.5
+ * @version 1.14.4
  * @license
  * Copyright (c) 2016 Federico Zivolo and contributors
  *
@@ -1140,8 +1140,7 @@ function getStyleComputedProperty(element, property) {
     return [];
   }
   // NOTE: 1 DOM access here
-  var window = element.ownerDocument.defaultView;
-  var css = window.getComputedStyle(element, null);
+  var css = getComputedStyle(element, null);
   return property ? css[property] : css;
 }
 
@@ -1229,7 +1228,7 @@ function getOffsetParent(element) {
   var noOffsetParent = isIE(10) ? document.body : null;
 
   // NOTE: 1 DOM access here
-  var offsetParent = element.offsetParent || null;
+  var offsetParent = element.offsetParent;
   // Skip hidden elements which don't have an offsetParent
   while (offsetParent === noOffsetParent && element.nextElementSibling) {
     offsetParent = (element = element.nextElementSibling).offsetParent;
@@ -1241,9 +1240,9 @@ function getOffsetParent(element) {
     return element ? element.ownerDocument.documentElement : document.documentElement;
   }
 
-  // .offsetParent will return the closest TH, TD or TABLE in case
+  // .offsetParent will return the closest TD or TABLE in case
   // no offsetParent is present, I hate this job...
-  if (['TH', 'TD', 'TABLE'].indexOf(offsetParent.nodeName) !== -1 && getStyleComputedProperty(offsetParent, 'position') === 'static') {
+  if (['TD', 'TABLE'].indexOf(offsetParent.nodeName) !== -1 && getStyleComputedProperty(offsetParent, 'position') === 'static') {
     return getOffsetParent(offsetParent);
   }
 
@@ -1791,8 +1790,7 @@ function getReferenceOffsets(state, popper, reference) {
  * @returns {Object} object containing width and height properties
  */
 function getOuterSizes(element) {
-  var window = element.ownerDocument.defaultView;
-  var styles = window.getComputedStyle(element);
+  var styles = getComputedStyle(element);
   var x = parseFloat(styles.marginTop) + parseFloat(styles.marginBottom);
   var y = parseFloat(styles.marginLeft) + parseFloat(styles.marginRight);
   var result = {
@@ -47858,7 +47856,7 @@ exports = module.exports = __webpack_require__(2)(false);
 
 
 // module
-exports.push([module.i, "\nh1, h2 {\n  font-weight: normal;\n}\nul {\n  list-style-type: none;\n  padding: 0;\n}\nli {\n  display: inline-block;\n  margin: 0 10px;\n}\na {\n  color: #35495E;\n}\n.btn-primary {\n    background-color: #008CBA; /* Blue */\n    color: white;\n    padding: 0.2em 0.5em 0.2em 0.5em;\n    display: inline-block;\n    font-size: 2em;\n    border-radius: 0.3em;\n}\n.btn-item{\n   align: right;\n   margin-left: 6em; \n   background-color: #ff8CBA; /* Blue */\n}\n.place{\n    border: solid black;\n}\n", ""]);
+exports.push([module.i, "\nh1, h2 {\n  font-weight: normal;\n}\nul {\n  list-style-type: none;\n  padding: 0;\n}\nli {\n  display: inline-block;\n  margin: 0 10px;\n}\na {\n  color: #35495E;\n}\n.btn-primary {\n    background-color: #008CBA; /* Blue */\n    color: white;\n    padding: 0.2em 0.5em 0.2em 0.5em;\n    display: inline-block;\n    font-size: 1.5em;\n    border-radius: 0.3em;\n}\n.btn-item{\n   align: right;\n   margin-left: 6em; \n   background-color: #ff8CBA; /* Blue */\n}\n.place{\n    border: solid black;\n}\n", ""]);
 
 // exports
 
@@ -48242,7 +48240,7 @@ exports = module.exports = __webpack_require__(2)(false);
 
 
 // module
-exports.push([module.i, "\n.modal-fade-enter[data-v-53ab54d2],\n.modal-fade-leave-active[data-v-53ab54d2] {\n    opacity: 0;\n}\n.modal-fade-enter-active[data-v-53ab54d2],\n.modal-fade-leave-active[data-v-53ab54d2] {\n  -webkit-transition: opacity .5s ease;\n  transition: opacity .5s ease\n}\n.modal-backdrop[data-v-53ab54d2] {\n  position: fixed;\n  top: 0;\n  right: 0;\n  bottom: 0;\n  left: 0;\n  background-color: rgba(0,0,0,.3);\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-pack: center;\n      -ms-flex-pack: center;\n          justify-content: center;\n  -webkit-box-align: center;\n      -ms-flex-align: center;\n          align-items: center;\n}\n.modal[data-v-53ab54d2] {\n  background-color: #fff;\n  -webkit-box-shadow: 2px 2px 20px 1px;\n          box-shadow: 2px 2px 20px 1px;\n  /* overflow-x:auto; */\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex; \n  /* flex-direction: column; */\n}\n.modal-header[data-v-53ab54d2],\n.modal-footer[data-v-53ab54d2] {\n  padding: 15px;\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n}\n.modal-header[data-v-53ab54d2] {\n  border-bottom: 1px solid #eee;\n  color: #4aae9b;\n  -webkit-box-pack: justify;\n      -ms-flex-pack: justify;\n          justify-content: space-between;\n}\n.modal-footer[data-v-53ab54d2] {\n  border-top: 1px solid #eee;\n  -webkit-box-pack: end;\n      -ms-flex-pack: end;\n          justify-content: flex-end;\n}\n.modal-body[data-v-53ab54d2] {\n  position: relative;\n  padding: 20px 10px;\n}\n.btn-close[data-v-53ab54d2] {\n  border: none 0;\n  font-size: 20px;\n  padding: 20px;\n  cursor: pointer;\n  font-weight: bold;\n  color: #4aae9b;\n  background-color: transparent;\n}\n.btn-green[data-v-53ab54d2] {\n  color: #fff;\n  background-color: #4aae9b;\n  border: 1px solid #4aae9b;\n  border-radius: 2px;\n  margin-left: 3px;\n}\n", ""]);
+exports.push([module.i, "\n.modal-fade-enter[data-v-53ab54d2],\n.modal-fade-leave-active[data-v-53ab54d2] {\n    opacity: 0;\n}\n.modal-fade-enter-active[data-v-53ab54d2],\n.modal-fade-leave-active[data-v-53ab54d2] {\n  -webkit-transition: opacity .5s ease;\n  transition: opacity .5s ease\n}\n.modal-backdrop[data-v-53ab54d2] {\n  position: fixed;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  background-color: rgba(0,0,0,.3);\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-pack: center;\n      -ms-flex-pack: center;\n          justify-content: center;\n  -webkit-box-align: center;\n      -ms-flex-align: center;\n          align-items: center;\n}\n.modal[data-v-53ab54d2] {\n  position: relative;\n  background-color: #fff;\n  -webkit-box-shadow: 2px 2px 20px 1px;\n          box-shadow: 2px 2px 20px 1px;\n  overflow-x:auto; \n  display: -webkit-box; \n  display: -ms-flexbox; \n  display: flex; \n  -webkit-box-orient: vertical; \n  -webkit-box-direction: normal; \n      -ms-flex-direction: column; \n          flex-direction: column;\n}\n.modal-header[data-v-53ab54d2],\n.modal-footer[data-v-53ab54d2] {\n  padding: 15px;\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n}\n.modal-header[data-v-53ab54d2] {\n  border-bottom: 1px solid #eee;\n  color: #4aae9b;\n  -webkit-box-pack: justify;\n      -ms-flex-pack: justify;\n          justify-content: space-between;\n}\n.modal-footer[data-v-53ab54d2] {\n  border-top: 1px solid #eee;\n  -webkit-box-pack: end;\n      -ms-flex-pack: end;\n          justify-content: flex-end;\n}\n.modal-body[data-v-53ab54d2] {\n  position: relative;\n  padding: 20px 10px;\n}\n.btn-close[data-v-53ab54d2] {\n  border: none 0;\n  font-size: 1.5em;\n  cursor: pointer;\n  font-weight: bold;\n  color: #4aae9b;\n  background-color: transparent;\n}\n.btn-green[data-v-53ab54d2] {\n  color: #fff;\n  background-color: #4aae9b;\n  border: 1px solid #4aae9b;\n  border-radius: 2px;\n  margin-left: 3px;\n}\n", ""]);
 
 // exports
 
@@ -48351,19 +48349,17 @@ var render = function() {
               "div",
               { staticClass: "modal-header", attrs: { id: "modalTitle" } },
               [
-                _vm._t("header", [
-                  _c("h2", [_vm._v("这是Modal弹框的标题")]),
-                  _vm._v(" "),
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn-close",
-                      attrs: { type: "button", "aria-label": "Close modal" },
-                      on: { click: _vm.close }
-                    },
-                    [_vm._v("x")]
-                  )
-                ])
+                _vm._t("header", [_c("h2", [_vm._v("这是Modal弹框的标题")])]),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn-close",
+                    attrs: { type: "button", "aria-label": "Close modal" },
+                    on: { click: _vm.close }
+                  },
+                  [_vm._v("x")]
+                )
               ],
               2
             ),
@@ -48390,7 +48386,7 @@ var render = function() {
                 _c(
                   "button",
                   {
-                    staticClass: "btn-green",
+                    staticClass: "btn-primary",
                     attrs: { type: "button", "aria-label": "Close modal" },
                     on: { click: _vm.close }
                   },
@@ -48472,7 +48468,11 @@ var render = function() {
       ]),
       _vm._v(" "),
       _c("div", { attrs: { slot: "footer" }, slot: "footer" }, [
-        _c("button", { on: { click: _vm.AddPlace } }, [_vm._v("Ok")])
+        _c(
+          "button",
+          { staticClass: "btn-primary", on: { click: _vm.AddPlace } },
+          [_vm._v("Ok")]
+        )
       ])
     ]
   )
@@ -48680,7 +48680,11 @@ var render = function() {
       ]),
       _vm._v(" "),
       _c("div", { attrs: { slot: "footer" }, slot: "footer" }, [
-        _c("button", { on: { click: _vm.AddItem } }, [_vm._v("Ok")])
+        _c(
+          "button",
+          { staticClass: "btn-primary", on: { click: _vm.AddItem } },
+          [_vm._v("Ok")]
+        )
       ])
     ]
   )
@@ -48895,7 +48899,11 @@ var render = function() {
       ]),
       _vm._v(" "),
       _c("div", { attrs: { slot: "footer" }, slot: "footer" }, [
-        _c("button", { on: { click: _vm.EditPlace } }, [_vm._v("Ok")])
+        _c(
+          "button",
+          { staticClass: "btn-primary", on: { click: _vm.EditPlace } },
+          [_vm._v("Ok")]
+        )
       ])
     ]
   )

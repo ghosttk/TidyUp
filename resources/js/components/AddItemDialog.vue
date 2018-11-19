@@ -4,7 +4,7 @@
       <div slot="body">
         <input ref="inputItem" itemholder="item name" @keyup.enter="AddItem" v-model="itemName" type="text"></input>
       </div>
-      <div slot="footer"><button @click="AddItem">Ok</button> </div>
+      <div slot="footer"><button class="btn-primary" @click="AddItem">Ok</button> </div>
     </Modal>
 </template>
 <script>
