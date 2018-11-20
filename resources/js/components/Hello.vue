@@ -4,7 +4,7 @@
     <AddPlaceDialog @onAddPlace="onAddPlace" @onCloseDialog="onClose('mShowAddPlace')" :mShow="mShowAddPlace"></AddPlaceDialog>
     <AddItemDialog @onAddItem="onAddItem" @onCloseDialog="onClose('mShowAddItem')" :mShow="mShowAddItem"></AddItemDialog>
     <EditPlaceDialog @onDeletePlace="onDeletePlace" @onEditPlace="onEditPlace" @onCloseDialog="onClose('mShowEditPlace')" :mShow="mShowEditPlace" :placename="curPlaceName"></EditPlaceDialog>
-    <EditItemDialog @onDeleteItem="onDeleteItem" @onEditItem="onEditItem" @onCloseDialog="onClose('mShowEditItem')" :curIPN="curItemPlaceName" :Places="places" :mShow="mShowEditItem" :itemname="curItemName"></EditItemDialog>
+    <EditItemDialog @onDeleteItem="onDeleteItem" @onEditItem="onEditItem" @onCloseDialog="onClose('mShowEditItem')" :curIPI="curPlaceIndex" :Places="places" :mShow="mShowEditItem" :itemname="curItemName"></EditItemDialog>
     <SearchItemResultDialog @onCloseDialog="onClose('mShowSearchItemResult')" :arrItem="searchResult" :mShow="mShowSearchItemResult"></SearchItemResultDialog>
   <!-- Buttons -->
     <button class="btn-primary" @click="onShowAddPlace">AddPlace</button>
@@ -84,12 +84,19 @@ export default {
       this.mShowSearchItemResult = true
       }
     },
-    onEditItem (iname) {
-      if (iname === '') return
+    onEditItem (iname, ipi) {
       let mydate = new Date()
-      this.tdata[this.curPlaceIndex].items[this.curItemIndex] = iname
-      this.tdata[this.curPlaceIndex].unsaved[this.curItemIndex] = true
-      this.tdata[this.curPlaceIndex].dates[this.curItemIndex] = mydate.toLocaleString()
+      if (iname !== '' && ipi === this.curPlaceIndex) { 
+        let mydate = new Date()
+        this.tdata[this.curPlaceIndex].items[this.curItemIndex] = iname
+        this.tdata[this.curPlaceIndex].unsaved[this.curItemIndex] = true
+        this.tdata[this.curPlaceIndex].dates[this.curItemIndex] = mydate.toLocaleString()
+      }
+      else if (ipi !== this.curPlaceIndex) {
+        this.tdata[ipi].items.push(iname)
+        this.tdata[ipi].unsaved.push(true)
+        this.tdata[ipi].dates.push(mydate)
+      }
     },
     onDeletePlace () {
 	  this.tdata.splice(this.curPlaceIndex, 1)
