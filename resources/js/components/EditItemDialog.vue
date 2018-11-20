@@ -2,6 +2,10 @@
     <Modal @close="onClose('mShow')" :show='mShow'>
       <div slot="header"> EditItem </div>
       <div slot="body">
+        <select v-model="sel">
+          <option disabled value="">Please Select</option>
+          <option v-for="(p, pi) in Places" :value="p" :key="pi">{{p}}</option>
+        </select>
         <input ref="inputItem" required :placeholder="itemname" @keyup.enter="EditItem" v-model="itemName" type="text"></input>
         <button @click="DeleteItem">DeleteItem</button>
       </div>
@@ -11,10 +15,15 @@
 <script>
 import Modal from './Modal'
 export default {
-  props: ['mShow', 'itemname'],
+  props: ['mShow', 'itemname', 'Places', 'curIPN'],
   data () {
     return {
-      itemName: this.itemname
+      itemName: this.itemname,
+    }
+  },
+  computed: {
+    sel() {
+      return this.curIPN
     }
   },
   components: {

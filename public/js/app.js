@@ -47960,6 +47960,7 @@ __webpack_require__(7);
       mShowAddItem: false,
       curPlaceIndex: 0,
       curPlaceName: '',
+      curItemPlaceName: '',
       mShowEditPlace: false,
       mShowEditItem: false,
       mShowSearchItemResult: false,
@@ -47970,6 +47971,15 @@ __webpack_require__(7);
     };
   },
 
+  computed: {
+    places: function places() {
+      var p = [];
+      for (var i = 0; i < this.tdata.length; i++) {
+        p.push(this.tdata[i].place);
+      }
+      return p;
+    }
+  },
   mounted: function mounted() {
     this.getTdata();
   },
@@ -48006,6 +48016,7 @@ __webpack_require__(7);
       this.curPlaceIndex = pi;
       this.curItemIndex = ii;
       this.curItemName = item;
+      this.curItemPlaceName = this.tdata[pi].place;
       this.mShowEditItem = true;
     },
     onEditPlace: function onEditPlace(pname) {
@@ -48061,6 +48072,7 @@ __webpack_require__(7);
       }
       axios.post('http://localhost:8000/things', { tdata: this.tdata }).then(function (res) {
         // history.go(0)    
+        alert("saved");
         _this2.$forceUpdate();
       }).catch(function (err) {
         console.log(err);
@@ -49004,7 +49016,7 @@ exports = module.exports = __webpack_require__(2)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -49027,16 +49039,25 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['mShow', 'itemname'],
+  props: ['mShow', 'itemname', 'Places', 'curIPN'],
   data: function data() {
     return {
       itemName: this.itemname
     };
   },
 
+  computed: {
+    sel: function sel() {
+      return this.curIPN;
+    }
+  },
   components: {
     Modal: __WEBPACK_IMPORTED_MODULE_0__Modal___default.a
   },
@@ -49083,6 +49104,47 @@ var render = function() {
       ]),
       _vm._v(" "),
       _c("div", { attrs: { slot: "body" }, slot: "body" }, [
+        _c(
+          "select",
+          {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.sel,
+                expression: "sel"
+              }
+            ],
+            on: {
+              change: function($event) {
+                var $$selectedVal = Array.prototype.filter
+                  .call($event.target.options, function(o) {
+                    return o.selected
+                  })
+                  .map(function(o) {
+                    var val = "_value" in o ? o._value : o.value
+                    return val
+                  })
+                _vm.sel = $event.target.multiple
+                  ? $$selectedVal
+                  : $$selectedVal[0]
+              }
+            }
+          },
+          [
+            _c("option", { attrs: { disabled: "", value: "" } }, [
+              _vm._v("Please Select")
+            ]),
+            _vm._v(" "),
+            _vm._l(_vm.Places, function(p, pi) {
+              return _c("option", { key: pi, domProps: { value: p } }, [
+                _vm._v(_vm._s(p))
+              ])
+            })
+          ],
+          2
+        ),
+        _vm._v(" "),
         _c("input", {
           directives: [
             {
@@ -49378,7 +49440,12 @@ var render = function() {
       }),
       _vm._v(" "),
       _c("EditItemDialog", {
-        attrs: { mShow: _vm.mShowEditItem, itemname: _vm.curItemName },
+        attrs: {
+          curIPN: _vm.curItemPlaceName,
+          Places: _vm.places,
+          mShow: _vm.mShowEditItem,
+          itemname: _vm.curItemName
+        },
         on: {
           onDeleteItem: _vm.onDeleteItem,
           onEditItem: _vm.onEditItem,

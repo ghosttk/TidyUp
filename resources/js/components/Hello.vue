@@ -4,7 +4,7 @@
     <AddPlaceDialog @onAddPlace="onAddPlace" @onCloseDialog="onClose('mShowAddPlace')" :mShow="mShowAddPlace"></AddPlaceDialog>
     <AddItemDialog @onAddItem="onAddItem" @onCloseDialog="onClose('mShowAddItem')" :mShow="mShowAddItem"></AddItemDialog>
     <EditPlaceDialog @onDeletePlace="onDeletePlace" @onEditPlace="onEditPlace" @onCloseDialog="onClose('mShowEditPlace')" :mShow="mShowEditPlace" :placename="curPlaceName"></EditPlaceDialog>
-    <EditItemDialog @onDeleteItem="onDeleteItem" @onEditItem="onEditItem" @onCloseDialog="onClose('mShowEditItem')" :mShow="mShowEditItem" :itemname="curItemName"></EditItemDialog>
+    <EditItemDialog @onDeleteItem="onDeleteItem" @onEditItem="onEditItem" @onCloseDialog="onClose('mShowEditItem')" :curIPN="curItemPlaceName" :Places="places" :mShow="mShowEditItem" :itemname="curItemName"></EditItemDialog>
     <SearchItemResultDialog @onCloseDialog="onClose('mShowSearchItemResult')" :arrItem="searchResult" :mShow="mShowSearchItemResult"></SearchItemResultDialog>
   <!-- Buttons -->
     <button class="btn-primary" @click="onShowAddPlace">AddPlace</button>
@@ -48,6 +48,7 @@ export default {
       mShowAddItem: false,
       curPlaceIndex: 0,
       curPlaceName: '',
+      curItemPlaceName: '',
       mShowEditPlace: false,
       mShowEditItem: false,
       mShowSearchItemResult: false,
@@ -55,6 +56,15 @@ export default {
       curItemName: '',
       searchResult: [],
       pClass: ['3', '6', '9', 'c']
+    }
+  },
+  computed: {
+    places() {
+      let p = []
+      for(let i=0; i<this.tdata.length; i++) {
+        p.push(this.tdata[i].place)
+      }
+      return p
     }
   },
   mounted: function () {
@@ -93,6 +103,7 @@ export default {
       this.curPlaceIndex = pi
       this.curItemIndex = ii
       this.curItemName = item
+      this.curItemPlaceName = this.tdata[pi].place
       this.mShowEditItem = true
     },
     onEditPlace (pname) {
@@ -146,6 +157,7 @@ export default {
       axios.post('http://localhost:8000/things', {tdata: this.tdata})
       .then( res => {
          // history.go(0)    
+         alert("saved")
 		 this.$forceUpdate()
       })
       .catch( err => {
