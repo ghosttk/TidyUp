@@ -6,7 +6,7 @@
           <option disabled value="">Please Select</option>
           <option v-for="(p, pi) in Places" :value="p" :key="pi">{{p}}</option>
         </select>
-        <input ref="inputItem" required :placeholder="itemname" @keyup.enter="EditItem" v-model="locITN" type="text"></input>
+        <input ref="inputItem" required :placeholder="itemname" @keyup.enter="EditItem" v-model="itemName" type="text"></input>
         <button @click="DeleteItem">DeleteItem</button>
       </div>
       <div slot="footer"><button class="btn-primary" @click="EditItem"> Ok </button> </div>
@@ -18,7 +18,7 @@ export default {
   props: ['mShow', 'itemname', 'Places', 'curIPI'],
   data () {
     return {
-      itemName: this.itemname,
+      itemName: '',
       locIPN: this.sel,
     }
   },
@@ -30,14 +30,6 @@ export default {
       set: function (newVal) {
         this.locIPN = newVal
         return newVal
-      }
-    },
-    locITN: {
-      get: function () {
-        return this.itemname
-      },
-      set: function (newVal) {
-        this.itemName = newVal
       }
     }
   },
@@ -51,7 +43,6 @@ export default {
     EditItem: function () {
       for(let i=0; i<this.Places.length; i++){
         if(this.Places[i] === this.locIPN){
-          this.itemName = this.itemname
           this.locIPI = i
           break
         }
@@ -60,6 +51,7 @@ export default {
           break
         }
       }
+      this.itemName = this.itemName || this.itemname
       this.$emit('onEditItem', this.itemName, this.locIPI)
       this.itemName = ''
       this.onClose()

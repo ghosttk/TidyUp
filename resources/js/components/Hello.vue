@@ -86,16 +86,21 @@ export default {
     },
     onEditItem (iname, ipi) {
       let mydate = new Date()
-      if (iname !== '' && ipi === this.curPlaceIndex) { 
+      //user changed item but leave  place unchanged
+      if (ipi === this.curPlaceIndex) { 
         let mydate = new Date()
         this.tdata[this.curPlaceIndex].items[this.curItemIndex] = iname
         this.tdata[this.curPlaceIndex].unsaved[this.curItemIndex] = true
         this.tdata[this.curPlaceIndex].dates[this.curItemIndex] = mydate.toLocaleString()
       }
+      //user changed place
       else if (ipi !== this.curPlaceIndex) {
         this.tdata[ipi].items.push(iname)
         this.tdata[ipi].unsaved.push(true)
         this.tdata[ipi].dates.push(mydate)
+        this.tdata[this.curPlaceIndex].items.splice(this.curItemIndex, 1)
+        this.tdata[this.curPlaceIndex].unsaved.splice(this.curItemIndex, 1)
+        this.tdata[this.curPlaceIndex].dates.splice(this.curItemIndex, 1)
       }
     },
     onDeletePlace () {

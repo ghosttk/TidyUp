@@ -47999,16 +47999,22 @@ __webpack_require__(7);
     },
     onEditItem: function onEditItem(iname, ipi) {
       var mydate = new Date();
-      if (iname !== '' && ipi === this.curPlaceIndex) {
+      //user changed item but leave  place unchanged
+      if (ipi === this.curPlaceIndex) {
         var _mydate = new Date();
         this.tdata[this.curPlaceIndex].items[this.curItemIndex] = iname;
         this.tdata[this.curPlaceIndex].unsaved[this.curItemIndex] = true;
         this.tdata[this.curPlaceIndex].dates[this.curItemIndex] = _mydate.toLocaleString();
-      } else if (ipi !== this.curPlaceIndex) {
-        this.tdata[ipi].items.push(iname);
-        this.tdata[ipi].unsaved.push(true);
-        this.tdata[ipi].dates.push(mydate);
       }
+      //user changed place
+      else if (ipi !== this.curPlaceIndex) {
+          this.tdata[ipi].items.push(iname);
+          this.tdata[ipi].unsaved.push(true);
+          this.tdata[ipi].dates.push(mydate);
+          this.tdata[this.curPlaceIndex].items.splice(this.curItemIndex, 1);
+          this.tdata[this.curPlaceIndex].unsaved.splice(this.curItemIndex, 1);
+          this.tdata[this.curPlaceIndex].dates.splice(this.curItemIndex, 1);
+        }
     },
     onDeletePlace: function onDeletePlace() {
       this.tdata.splice(this.curPlaceIndex, 1);
@@ -49022,7 +49028,7 @@ exports = module.exports = __webpack_require__(2)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -49055,7 +49061,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   props: ['mShow', 'itemname', 'Places', 'curIPI'],
   data: function data() {
     return {
-      itemName: this.itemname,
+      itemName: '',
       locIPN: this.sel
     };
   },
@@ -49069,14 +49075,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         this.locIPN = newVal;
         return newVal;
       }
-    },
-    locITN: {
-      get: function get() {
-        return this.itemname;
-      },
-      set: function set(newVal) {
-        this.itemName = newVal;
-      }
     }
   },
   components: {
@@ -49089,7 +49087,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     EditItem: function EditItem() {
       for (var i = 0; i < this.Places.length; i++) {
         if (this.Places[i] === this.locIPN) {
-          this.itemName = this.itemname;
           this.locIPI = i;
           break;
         } else if (this.locIPN === undefined) {
@@ -49097,6 +49094,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           break;
         }
       }
+      this.itemName = this.itemName || this.itemname;
       this.$emit('onEditItem', this.itemName, this.locIPI);
       this.itemName = '';
       this.onClose();
@@ -49181,13 +49179,13 @@ var render = function() {
             {
               name: "model",
               rawName: "v-model",
-              value: _vm.locITN,
-              expression: "locITN"
+              value: _vm.itemName,
+              expression: "itemName"
             }
           ],
           ref: "inputItem",
           attrs: { required: "", placeholder: _vm.itemname, type: "text" },
-          domProps: { value: _vm.locITN },
+          domProps: { value: _vm.itemName },
           on: {
             keyup: function($event) {
               if (
@@ -49202,7 +49200,7 @@ var render = function() {
               if ($event.target.composing) {
                 return
               }
-              _vm.locITN = $event.target.value
+              _vm.itemName = $event.target.value
             }
           }
         }),
