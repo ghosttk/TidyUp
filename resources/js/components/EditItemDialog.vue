@@ -51,7 +51,7 @@ export default {
           break
         }
       }
-      this.itemName = this.itemName || this.itemname
+      this.itemName = this.itemName?this.itemName:this.itemname
       this.$emit('onEditItem', this.itemName, this.locIPI)
       this.itemName = ''
       this.onClose()

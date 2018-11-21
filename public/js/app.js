@@ -49094,7 +49094,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           break;
         }
       }
-      this.itemName = this.itemName || this.itemname;
+      this.itemName = this.itemName ? this.itemName : this.itemname;
       this.$emit('onEditItem', this.itemName, this.locIPI);
       this.itemName = '';
       this.onClose();
