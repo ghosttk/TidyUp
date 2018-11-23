@@ -1,15 +1,15 @@
 <template>
     <Modal @close="onClose('mShow')" :show='mShow'>
-      <div slot="header"> EditItem </div>
+      <div slot="header"> {{$t('lang.edit')}}{{$t('lang.item')}}</div>
       <div slot="body">
         <select v-model="sel">
           <option disabled value="">Please Select</option>
           <option v-for="(p, pi) in Places" :value="p" :key="pi">{{p}}</option>
         </select>
         <input ref="inputItem" required :placeholder="itemname" @keyup.enter="EditItem" v-model="itemName" type="text"></input>
-        <button @click="DeleteItem">DeleteItem</button>
+        <button @click="DeleteItem">{{$t('lang.del')}}{{$t('lang.item')}}</button>
       </div>
-      <div slot="footer"><button class="btn-primary" @click="EditItem"> Ok </button> </div>
+      <div slot="footer"><button class="btn-primary" @click="EditItem"> {{$t('lang.ok')}} </button> </div>
     </Modal>
 </template>
 <script>

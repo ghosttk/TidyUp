@@ -19,7 +19,7 @@
           <slot name="footer">
             这是Modal弹框的脚部
           </slot>
-        <button type="button" class="btn-primary" @click="close" aria-label="Close modal">关闭</button>
+        <button type="button" class="btn-primary" @click="close" aria-label="Close modal">{{$t('lang.close')}}</button>
         </div>
       </div>
     </div>

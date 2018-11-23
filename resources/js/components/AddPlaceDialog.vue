@@ -1,6 +1,6 @@
 <template>
     <Modal @close="onClose('mShow')" :show='mShow'>
-      <div slot="header"> AddPlace </div>
+      <div slot="header"> {{$t("lang.add")}}{{$t("lang.place")}}</div>
       <div slot="body">
         <input ref="inputPlace" placeholder="place name" @keyup.enter="AddPlace" v-model="placeName" type="text"></input>
       </div>

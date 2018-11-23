@@ -7,16 +7,17 @@
     <EditItemDialog @onDeleteItem="onDeleteItem" @onEditItem="onEditItem" @onCloseDialog="onClose('mShowEditItem')" :curIPI="curPlaceIndex" :Places="places" :mShow="mShowEditItem" :itemname="curItemName"></EditItemDialog>
     <SearchItemResultDialog @onCloseDialog="onClose('mShowSearchItemResult')" :arrItem="searchResult" :mShow="mShowSearchItemResult"></SearchItemResultDialog>
   <!-- Buttons -->
-    <button class="btn-primary" @click="onShowAddPlace">AddPlace</button>
+    <button class="btn-primary" @click="onShowAddPlace">{{$t("lang.add")}}{{$t("lang.place")}}</button>
+    <button class="btn-primary" @click="onSave">{{$t('lang.save')}}</button>
     <input type="text" v-model="searchItem" @keyup.enter="onSearchItem">search</input>
-    <button class="btn-primary" @click="onSave">Save</button>
+    <h3 v-show="connecting">Connecting to server...</h3>
     <div v-for="(pl, pi) in tdata" class="place" :id="pi" href="'#'+pi"> 
-      <button class="btn-primary" @click="onShowEditPlace(pl, pi)" :style="{ backgroundColor: '#'+pClass[pi%4]+'0'+'0'}">Place:{{ pl.place }}</button>
+      <button class="btn-primary" @click="onShowEditPlace(pl, pi)" :style="{ backgroundColor: '#'+pClass[pi%4]+'0'+'0'}">{{$t('lang.place')}}:{{ pl.place }}</button>
         <div v-for="(item, ii)  in pl.items" > 
         <button class="btn-primary btn-item" @click="onShowEditItem(pi, item, ii)" :style="{ backgroundColor: '#'+pClass[pi%4]+'0'+pClass[ii%4], color: '#fff'}"> {{ item }} </button> {{pl.dates[ii]}} <code v-if="pl.unsaved[ii]">unsaved</code>
         <br>
         </div>
-      <button class="btn-primary" @click="onShowAddItem(pi)"> AddItem </button>
+      <button class="btn-primary" @click="onShowAddItem(pi)"> {{$t("lang.add")}}{{$t("lang.item")}}</button>
       <hr>
     </div>
   </div>
@@ -46,16 +47,17 @@ export default {
       isShowLog: false,
       mShowAddPlace: false,
       mShowAddItem: false,
-      curPlaceIndex: 0,
+      curPlaceIndex: undefined,
       curPlaceName: '',
       curItemPlaceName: '',
       mShowEditPlace: false,
       mShowEditItem: false,
       mShowSearchItemResult: false,
-      curItemIndex: 0,
+      curItemIndex: undefined,
       curItemName: '',
       searchResult: [],
-      pClass: ['3', '6', '9', 'c']
+      pClass: ['3', '6', '9', 'c'],
+      connecting: true
     }
   },
   computed: {
@@ -110,6 +112,7 @@ export default {
       this.tdata[this.curPlaceIndex].items.splice(this.curItemIndex,1)
       this.tdata[this.curPlaceIndex].dates.splice(this.curItemIndex,1)
       this.tdata[this.curPlaceIndex].unsaved.splice(this.curItemIndex,1)
+      this.curItemIndex = undefined
     },
     onShowEditItem (pi, item, ii) {
       this.curPlaceIndex = pi
@@ -153,6 +156,7 @@ export default {
       axios.get('http://localhost:8000/things')
         .then(res => {
          this.tdata = eval(res.data.jdata)
+         this.connecting = false
         })
         .catch(err => {
           let mydate = new Date()

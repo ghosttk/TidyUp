@@ -1,6 +1,6 @@
 <template>
     <Modal @close="onClose('mShow')" :show='mShow'>
-      <div slot="header"> EditPlace </div>
+      <div slot="header">{{$t('lang.edit')}}{{$t('lang.place')}} </div>
       <div slot="body">
         <input ref="inputPlace" required :placeholder="placename" @keyup.enter="EditPlace" v-model.lazy="placeName" type="text"></input>
         <button @click="DeletePlace">DeletePlace</button>
